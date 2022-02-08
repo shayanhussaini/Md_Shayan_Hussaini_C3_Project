@@ -31,7 +31,31 @@ public class RestaurantService {
     public List<Restaurant> getRestaurants() {
         return restaurants;
     }
-    public Double getOrderTotal(List<String> menuList) throws itemNotFoundException {
-        return 0;
+    public Double getOrderTotal(String restaurantName, List<String> selectedItemList) throws itemNotFoundException, restaurantNotFoundException
+    {
+        Double totalAmount = 0.0;
+        Restaurant restaurant = findRestaurantByName(restaurantName);
+        if(null == restaurant)
+            throw new restaurantNotFoundException(restaurantName +" does not exists");
+        List<Item> menuList = restaurant.getMenu();
+        if(menuList.isEmpty())
+            throw new itemNotFoundException("No items are there in restaurant");
+        for(String selectedItem: selectedItemList)
+        {
+            boolean selectedItemFound = false;
+            for(Item item: menuList)
+            {
+                if (selectedItem.contains(item.getName())) {
+                    totalAmount += item.getPrice();
+                    selectedItemFound = true;
+                    break;
+                }
+            }
+            if(!selectedItemFound)
+            {
+                throw new itemNotFoundException(selectedItem + "is not found at " + restaurantName);
+            }
+        }
+        return totalAmount;
     }
 }
