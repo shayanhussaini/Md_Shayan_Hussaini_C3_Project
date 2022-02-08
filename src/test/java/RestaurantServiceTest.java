@@ -4,6 +4,8 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 
 class RestaurantServiceTest {
 
@@ -63,4 +65,29 @@ class RestaurantServiceTest {
         assertEquals(initialNumberOfRestaurants + 1,service.getRestaurants().size());
     }
     //<<<<<<<<<<<<<<<<<<<<ADMIN: ADDING & REMOVING RESTAURANTS>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
+    //>>>>>>>>>>>>>>>>>>>>>>GET ORDER TOTAL <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    @Test
+    public void get_order_total_for_selected_items() throws itemNotFoundException {
+        List<String> menuList = new ArrayList<String>();
+        menuList.add("Biryani");
+        menuList.add("Coke");
+        assertEquals(2, service.getOrderTotal(menuList));
+    }
+
+    @Test
+    public void get_order_total_for_no_selected_items() throws itemNotFoundException
+    {
+        List<String> menuList = new ArrayList<String>();
+        assertEquals(0, service.getOrderTotal(menuList));
+    }
+
+    @Test
+    public void get_order_total_for_item_does_not_exist_should_throw_exception()throws itemNotFoundException
+    {
+        List<String> menuList = new ArrayList<String>();
+        menuList.add("Coke");
+        assertThrows(itemNotFoundException.class,()->service.getOrderTotal(menuList));
+    }
+    //>>>>>>>>>>>>>>>>>>>>>>GET OREER TOTAL<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
